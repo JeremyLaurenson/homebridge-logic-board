@@ -14,9 +14,17 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/JeremyLaurenson/homebridge-logic-board.git"
+    "url": "git+https://github.com/JeremyLaurenson/homebridge-logic-board.git"
   },
   "engines": {
     "homebridge": ">=0.2.5"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/JeremyLaurenson/homebridge-logic-board/issues"
+  },
+  "homepage": "https://github.com/JeremyLaurenson/homebridge-logic-board#readme",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jeremy Laurenson"
 }
