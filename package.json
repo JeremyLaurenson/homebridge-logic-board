@@ -1,6 +1,6 @@
 {
   "name": "homebridge-logic-board",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Binary inputs/outputs Homekit automation with custom logic. Plugin for homebridge: https://github.com/nfarina/homebridge",
   "main": "index.js",
   "license": "GPL-3.0",
@@ -14,7 +14,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/sbhhbs/homebridge-logic-board.git"
+    "url": "https://github.com/JeremyLaurenson/homebridge-logic-board.git"
   },
   "engines": {
     "homebridge": ">=0.2.5"
