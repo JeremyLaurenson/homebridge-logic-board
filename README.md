@@ -1,5 +1,6 @@
 # "Logic Board" Plugin
 This homebridge plugin allows complex binary logic. And you'll need some knowledge of programming and javascript to use it.
+It has been forked from the original which has not been updated in four years https://github.com/sbhhbs/homebridge-logic-board
 
 
 ## How to install
