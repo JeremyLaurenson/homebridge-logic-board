@@ -12,33 +12,31 @@ As an example, I have several contact censors on door locks, and this plugin all
 ## Example config.json:
 
  ```
-    "accessories": [
-        {
-			"accessory": "LogicBoard",
-			"name": "Logic Board Name",
-			"inputs": [
-				{
-					"varName" : "a",
-					"displayName" : "a switch"
-				},
-				{
-					"varName" : "b",
-					"displayName" : "b switch"
-				}
-			],
-			"outputs": [
-				{
-					"varName" : "x",
-					"displayName" : "x result"
-				},
-				{
-					"varName" : "y",
-					"displayName" : "y result"
-				}
-			],
-			"eval": "x = a;y = a && b;"
-		} 
-    ]
+{
+            "accessory": "LogicBoard",
+            "name": "Door Lock Logic",
+            "inputs": [
+                {
+                    "varName": "a",
+                    "displayName": "Logic Living Room Door Lock"
+                },
+                {
+                    "varName": "b",
+                    "displayName": "Logic Front Door Lock"
+                },
+                {
+                    "varName": "c",
+                    "displayName": "Logic Laundry Door Lock"
+                }
+            ],
+            "outputs": [
+                {
+                    "varName": "x",
+                    "displayName": "Logic House Lock Status"
+                }
+            ],
+            "eval": "x = a && b && c;"
+        }
 ```
 
 All "inputs" will be interpreted as a swtich in homekit, and all "outputs" will be a occupancy sensor.
