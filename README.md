@@ -4,7 +4,7 @@ The original author of this plugin bailed and hse not updated it in four years. 
 This homebridge plugin allows complex binary logic. And you'll need some knowledge of programming and javascript to use it.
 It has been forked from the original which has not been updated in four years https://github.com/sbhhbs/homebridge-logic-board
 
-
+As an example, I have several contact censors on door locks, and this plugin allows me to say "If all the doors are locked" turn a light on... else turn it off.
 ## How to install
 
  ```(sudo) npm install -g homebridge-logic-board```
