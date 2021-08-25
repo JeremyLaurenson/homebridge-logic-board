@@ -79,7 +79,7 @@ class LogicBoard {
       for (var i = 0; i < this.config.outputs.length; i++) {
         var one = this.config.outputs[i];
         var result = eval.call(null, one["varName"]);
-        this.log(one["varName"] + 'evaluates to: ' + result);
+        this.log(one["varName"] + ' evaluates to: ' + result);
         resultMap[one["varName"]] = result;
       }
 
@@ -105,6 +105,7 @@ class LogicBoard {
       sw.getCharacteristic(Characteristic.LogicBoardVarName)
       .getValue(function(err, value2) {
         if (!err) {
+        ///     console.log('set_value_actual ' + value +' for ' + JSON.stringify(sw));
           varMap[value2] = value;
           remainingStatus -= 1;
           if (!remainingStatus) {
@@ -116,10 +117,11 @@ class LogicBoard {
 
 
     for (var i = 0; i < this.inputSwitchServices.length; i++) {
-      var sw = this.inputSwitchServices[i];
+      let sw = this.inputSwitchServices[i];
       sw.getCharacteristic(Characteristic.On)
       .getValue(function(err, value) {
         if (!err) {
+          ///console.log('set_value ' + i + ' ' + value +' for ' + JSON.stringify(sw));
           set_value(sw, value);
         }
       });
@@ -160,4 +162,3 @@ class LogicBoard {
     return [informationService, ...this.inputSwitchServices, ...this.outputOccupancyServices]
   }
 }
-
