@@ -1,4 +1,9 @@
 "use strict";
+/*************************************************************************************
+**** Logic Board Homebridge Plugin V0.03                                          ****
+**** Originally written by Bob https://github.com/sbhhbs                          ****
+**** Forked and bugfixed by Jeremy Laurenson                                      ****
+**************************************************************************************/
 
 var inherits = require('util').inherits;
 var Service, Characteristic;
@@ -9,6 +14,9 @@ module.exports = function(homebridge) {
 
 
   Characteristic.LogicBoardVarName = function() {
+	// I am using the existing plugin UUID so that folks can "upgrade" to this version of the 
+	// LogicBoard plugin
+	
     Characteristic.call(this, 'LogicBoard Variable Name', '00000052-0000-1000-8000-1026BB765291');
     this.setProps({
       format: Characteristic.Formats.STRING,
@@ -19,7 +27,8 @@ module.exports = function(homebridge) {
   inherits(Characteristic.LogicBoardVarName, Characteristic);
   Characteristic.LogicBoardVarName.UUID = '00000052-0000-1000-8000-1026BB765291';
 
-
+	// Registering using the old logic board ID so that users can simply use this as a 
+	// replacement for their existing configs.
   homebridge.registerAccessory("homebridge-logic-board", "LogicBoard", LogicBoard);
 };
 
@@ -57,16 +66,18 @@ class LogicBoard {
     var evalueate_all = () => {
       var keys = [];
       var wholeEvalStr = '';
+	  // Iterate through all the inoput variables in the config
       for (var key in varMap) {
         if (varMap.hasOwnProperty(key)) {
           keys.push(key);
-
+		  // Add this variable and its setting to the script we will sent to javascript to execute
           var evalStr = 'var ' + key + ' = ' + varMap[key] + ';';
           wholeEvalStr = wholeEvalStr + evalStr;
         }
       }
       for (var i = 0; i < this.config.outputs.length; i++) {
         var one = this.config.outputs[i];
+		// Add the output variable tot he script we will send to javascript to evaluate and default to false
         var evalStr = 'var ' + one["varName"] + ' = ' + 'false' + ';';
         wholeEvalStr = wholeEvalStr + evalStr;
       }
@@ -74,8 +85,10 @@ class LogicBoard {
 
       wholeEvalStr +=  this.evalStr;
       this.log("evalStr: ", wholeEvalStr);
+	  // Pass the evaluation script to javascript to run
       eval.call(null, wholeEvalStr);
 
+		// For each output variable, lets get its value and populate our resultMap
       for (var i = 0; i < this.config.outputs.length; i++) {
         var one = this.config.outputs[i];
         var result = eval.call(null, one["varName"]);
@@ -83,6 +96,8 @@ class LogicBoard {
         resultMap[one["varName"]] = result;
       }
 
+
+		// Now lets iterate through our output variables and update the occupancy sensors associated
       for (var i = 0; i < this.outputOccupancyServices.length; i++) {
         var occupancyService = this.outputOccupancyServices[i];
         
@@ -105,7 +120,6 @@ class LogicBoard {
       sw.getCharacteristic(Characteristic.LogicBoardVarName)
       .getValue(function(err, value2) {
         if (!err) {
-        ///     console.log('set_value_actual ' + value +' for ' + JSON.stringify(sw));
           varMap[value2] = value;
           remainingStatus -= 1;
           if (!remainingStatus) {
@@ -117,6 +131,12 @@ class LogicBoard {
 
 
     for (var i = 0; i < this.inputSwitchServices.length; i++) {
+	  // This next line was the original bug in the original statusboard.
+	  // By not setting a local variable to the inputSwitchService, subsequent
+	  // loops throught his could would cause all input variables to simply be
+	  // overwritten by the last one looked at since this loop completes befoe
+	  // the set_value executes for each loop.
+	  
       let sw = this.inputSwitchServices[i];
       sw.getCharacteristic(Characteristic.On)
       .getValue(function(err, value) {
@@ -155,8 +175,8 @@ class LogicBoard {
 
   getServices() {
     var informationService = new Service.AccessoryInformation()
-        .setCharacteristic(Characteristic.Manufacturer, 'github.com/sbhhbs')
-        .setCharacteristic(Characteristic.Model, '0.0.1')
+        .setCharacteristic(Characteristic.Manufacturer, 'github.com/jeremylaurenson')
+        .setCharacteristic(Characteristic.Model, '0.0.3')
         .setCharacteristic(Characteristic.SerialNumber, '20171108001');
 
     return [informationService, ...this.inputSwitchServices, ...this.outputOccupancyServices]
